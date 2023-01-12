@@ -1287,7 +1287,7 @@ class ComputeLossAuxOTA:
     def build_targets(self, p, targets, imgs):
         
         indices, anch = self.find_3_positive(p, targets)
-
+        device = torch.device(targets.device)
         matching_bs = [[] for pp in p]
         matching_as = [[] for pp in p]
         matching_gjs = [[] for pp in p]
@@ -1327,7 +1327,7 @@ class ComputeLossAuxOTA:
                 all_gj.append(gj)
                 all_gi.append(gi)
                 all_anch.append(anch[i][idx])
-                from_which_layer.append(torch.ones(size=(len(b),)) * i)
+                from_which_layer.append((torch.ones(size=(len(b),)) * i).to(device))
                 
                 fg_pred = pi[b, a, gj, gi]                
                 p_obj.append(fg_pred[:, 4:5])
@@ -1449,7 +1449,7 @@ class ComputeLossAuxOTA:
         matching_anchs = [[] for pp in p]
         
         nl = len(p)    
-    
+        device = torch.device(targets.device)
         for batch_idx in range(p[0].shape[0]):
         
             b_idx = targets[:, 0]==batch_idx
@@ -1480,7 +1480,7 @@ class ComputeLossAuxOTA:
                 all_gj.append(gj)
                 all_gi.append(gi)
                 all_anch.append(anch[i][idx])
-                from_which_layer.append(torch.ones(size=(len(b),)) * i)
+                from_which_layer.append((torch.ones(size=(len(b),)) * i).to(device))
                 
                 fg_pred = pi[b, a, gj, gi]                
                 p_obj.append(fg_pred[:, 4:5])
@@ -1552,6 +1552,7 @@ class ComputeLossAuxOTA:
                 matching_matrix[:, anchor_matching_gt > 1] *= 0.0
                 matching_matrix[cost_argmin, anchor_matching_gt > 1] = 1.0
             fg_mask_inboxes = matching_matrix.sum(0) > 0.0
+            fg_mask_inboxes
             matched_gt_inds = matching_matrix[:, fg_mask_inboxes].argmax(0)
         
             from_which_layer = from_which_layer[fg_mask_inboxes]
