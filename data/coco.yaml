@@ -1,0 +1,20 @@
+# COCO 2017 dataset http://cocodataset.org
+
+# download command/URL (optional)
+# download: bash ./scripts/get_coco.sh
+
+# train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
+train: /content/yolov7/doc_layout/train/images  # 118k images
+val: /content/yolov7/doc_layout/val/images  # 5k images
+test: /content/yolov7/doc_layout/test/images
+
+# number of classes
+nc: 4
+
+# class names
+names: [
+        'headline',
+        'doc',
+        'cir_stamp',
+        'rec_stamp'
+]
